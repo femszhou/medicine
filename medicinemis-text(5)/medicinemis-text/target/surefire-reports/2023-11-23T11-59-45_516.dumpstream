@@ -1,0 +1,5 @@
+# Created at 2023-11-23T11:59:46.315
+Boot Manifest-JAR contains absolute paths in classpath 'D:\Desktop\数据库\medicinemis-text(5)\medicinemis-text\target\test-classes'
+Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+'other' has different root
+

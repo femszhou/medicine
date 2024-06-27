@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.medicinemis.mapper.BuyerMapper">
+    <update id="update">
+        update medicine
+        <set>
+            <if test="medicineName != null and medicineName != ''">
+                medicine_name = #{medicineName},
+            </if>
+            <if test="medicineImage != null">
+                medicine_image = #{medicineImage}
+            </if>
+            <if test="medicineMode != null and medicineMode != ''">
+                medicine_mode = #{medicineMode},
+            </if>
+            <if test="medicineEfficacy != null and medicineEfficacy != ''">
+                medicine_efficacy = #{medicineEfficacy},
+            </if>
+            <if test="medicinePrice != null">
+                medicine_price = #{medicinePrice},
+            </if>
+            <if test="medicineCount != null">
+                medicine_count = #{medicineCount}
+            </if>
+        </set>
+        where medicine_no = #{medicineNo}
+    </update>
+    <delete id="delete">
+        delete
+        from medicine
+        where medicine_no in
+        <foreach collection="medicineNos" item="medicineNo" separator="," open="(" close=")">
+            #{medicineNo}
+        </foreach>
+    </delete>
+
+    <select id="page" resultType="com.medicinemis.pojo.Medicine">
+        select *
+        from medicine
+        <where>
+            <if test="medicineNo != null">
+                medicine_no = #{medicineNo}
+            </if>
+            <if test="medicineName != null and medicineName != ''">
+                and medicine_name like concat('%',#{medicineName},'%')
+            </if>
+            <if test="medicineMode != null and medicineMode != ''">
+                and medicine_mode like concat('%',#{medicineMode},'%')
+            </if>
+            <if test="medicineEfficacy != null and medicineEfficacy != ''">
+                and medicine_efficacy like concat('%',#{medicineEfficacy},'%')
+            </if>
+        </where>
+    </select>
+</mapper>

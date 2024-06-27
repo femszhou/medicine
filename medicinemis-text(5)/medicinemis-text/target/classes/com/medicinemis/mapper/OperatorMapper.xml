@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.medicinemis.mapper.OperatorMapper">
+
+    <insert id="addOrders" useGeneratedKeys="true" keyProperty="ordersNo" keyColumn="orders_no">
+        insert into orders(client_no,orders_date,operator_no,total_price)
+        values (#{clientNo},#{ordersDate},#{operatorNo},#{totalPrice})
+    </insert>
+
+    <update id="updateOrders">
+        update orders
+        <set>
+            <if test="clientNo != null">
+                client_no = #{clientNo},
+            </if>
+            <if test="ordersDate != null">
+                orders_date = #{ordersDate},
+            </if>
+            <if test="operatorNo != null">
+                operator_no = #{operatorNo},
+            </if>
+            <if test="totalPrice != null">
+                total_price = #{totalPrice},
+            </if>
+        </set>
+        where orders_no = #{ordersNo}
+    </update>
+
+    <update id="updateClient">
+        update client
+        <set>
+            <if test="clientName != null and clientName != ''">
+                client_name = #{clientName},
+            </if>
+            <if test="clientSex != null">
+                client_sex = #{clientSex},
+            </if>
+            <if test="clientAge != null">
+                client_age = #{clientAge},
+            </if>
+            <if test="clientAddress != null and clientAddress != ''">
+                client_address = #{clientAddress},
+            </if>
+            <if test="clientPhone != null and clientPhone != ''">
+                client_phone = #{clientPhone},
+            </if>
+            <if test="clientSymptom != null and clientSymptom != ''">
+                client_symptom = #{clientSymptom},
+            </if>
+            <if test="clientRemark != null and clientRemark != ''">
+                client_remark = #{clientRemark},
+            </if>
+        </set>
+        where client_no = #{clientNo}
+    </update>
+
+    <select id="ordersPage" resultType="com.medicinemis.pojo.Orders">
+        select *
+        from orders
+        <where>
+            <if test="ordersNo != null">
+                orders_no = #{ordersNo}
+            </if>
+            <if test="clientNo != null">
+                and client_no = #{clientNo}
+            </if>
+            <if test="medicineNo != null">
+                and medicine_no = #{medicineNo}
+            </if>
+            <if test="operatorNo != null">
+                and operator_no = #{operatorNo}
+            </if>
+        </where>
+    </select>
+
+    <select id="clientPage" resultType="com.medicinemis.pojo.Client">
+        select *
+        from client
+        <where>
+            <if test="clientNo != null">
+                client_no = #{clientNo}
+            </if>
+            <if test="clientName != null and clientName != ''">
+                and client_name like concat('%',#{clientName},'%')
+            </if>
+            <if test="clientSex != null">
+                and client_sex = #{clientSex}
+            </if>
+            <if test="clientAge != null">
+                and client_age = #{clientAge}
+            </if>
+            <if test="clientAddress != null and clientAddress != ''">
+                and client_address like concat('%',#{clientAddress},'%')
+            </if>
+            <if test="clientPhone != null">
+                and client_phone = #{clientPhone}
+            </if>
+            <if test="clientSymptom != null and clientSymptom != ''">
+                and client_symptom like concat('%',#{clientSymptom},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="getMedicineList" resultType="com.medicinemis.pojo.MedicineDTO">
+        select * from medicine_orders
+        <where>
+            <if test="medicineNo != null">
+                and medicine_no = #{medicineNo}
+            </if>
+            <if test="ordersNo != null">
+                and orders_no = #{ordersNo}
+            </if>
+            <if test="medicineNumber != null">
+                and medicine_number = #{medicineNumber}
+            </if>
+            <if test="price != null">
+                and price = #{price}
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteShoppongCart">
+        delete from
+        medicine_orders
+        where orders_no = #{ordersNo} and medicine_no = #{medicineNo}
+    </delete>
+
+</mapper>

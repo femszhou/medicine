@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.medicinemis.mapper.AdministratorMapper">
+    <update id="updateBuyer">
+        update buyer
+        <set>
+            <if test="buyerName != null and buyerName != ''">
+                buyer_name = #{buyerName},
+            </if>
+            <if test="buyerSex != null">
+                buyer_sex = #{buyerSex},
+            </if>
+            <if test="buyerPassword != null and buyerPassword != ''">
+                buyer_password = #{buyerPassword},
+            </if>
+            <if test="buyerPhone != null and buyerPhone != ''">
+                buyer_phone = #{buyerPhone},
+            </if>
+            <if test="buyerClass != null and buyerClass != ''">
+                buyer_class = #{buyerClass},
+            </if>
+            <if test="buyerRemark != null and buyerRemark != ''">
+                buyer_remark = #{buyerRemark},
+            </if>
+        </set>
+        where buyer_no = #{buyerNo}
+    </update>
+    <update id="updateOperator">
+        update operator
+        <set>
+            <if test="operatorName != null and operatorName != ''">
+                operator_name = #{operatorName},
+            </if>
+            <if test="operatorSex != null">
+                operator_sex = #{operatorSex},
+            </if>
+            <if test="operatorPassword != null and operatorPassword != ''">
+                operator_password = #{operatorPassword},
+            </if>
+            <if test="operatorPhone != null and operatorPhone != ''">
+                operator_phone = #{operatorPhone},
+            </if>
+            <if test="operatorClass != null and operatorClass != ''">
+                operator_class = #{operatorClass},
+            </if>
+            <if test="operatorRemark != null and operatorRemark != ''">
+                operator_remark = #{operatorRemark}
+            </if>
+        </set>
+        where operator_no = #{operatorNo}
+    </update>
+
+    <delete id="deleteBuyers">
+        delete
+        from buyer
+        where buyer_no in
+        <foreach collection="buyerNos" item="buyerNo" separator="," open="(" close=")">
+            #{buyerNo}
+        </foreach>
+    </delete>
+
+    <delete id="deleteOperators">
+        delete
+        from operator
+        where operator_no in
+        <foreach collection="operatorNos" item="operatorNo" separator="," open="(" close=")">
+            #{operatorNo}
+        </foreach>
+    </delete>
+
+    <select id="buyerPage" resultType="com.medicinemis.pojo.Buyer">
+        select *
+        from buyer
+        <where>
+            <if test="buyerNo != null">
+                and buyer_no = #{buyerNo}
+            </if>
+            <if test="buyerName != null and buyerName != '' ">
+                and buyer_name like concat('%',#{buyerName},'%')
+            </if>
+            <if test="buyerSex != null">
+                and buyer_sex = #{buyerSex}
+            </if>
+            <if test="buyerPhone != null">
+                and buyer_phone = #{buyerPhone}
+            </if>
+        </where>
+    </select>
+
+    <select id="operatorPage" resultType="com.medicinemis.pojo.Operator">
+        select *
+        from operator
+        <where>
+            <if test="operatorNo != null">
+                operator_no = #{operatorNo}
+            </if>
+            <if test="operatorName != null and operatorName != '' ">
+                operator_name like concat('%',#{operatorName},'%')
+            </if>
+            <if test="operatorSex != null">
+                and operator_sex = #{operatorSex}
+            </if>
+            <if test="operatorPhone != null">
+                and operator_phone = #{operatorPhone}
+            </if>
+        </where>
+    </select>
+</mapper>
